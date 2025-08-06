@@ -15,6 +15,9 @@ int main() {
     JLOG_ERROR("Testing error, {}", "02");
     JLOG_FATAL("Testing fatal, {}", "02");
 
+    // Logging non-string messages
+    JLOG_DEBUG(123);
+
     // Create a new text logger that will automatically be cross-platform
     const std::shared_ptr<JLog::Logger> customLogger = JLog::getDefaultNew("customLogger");
 

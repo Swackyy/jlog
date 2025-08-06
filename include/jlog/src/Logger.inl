@@ -28,6 +28,11 @@ namespace JLog {
 #endif
     }
 
+    template<class Message, class... Args, std::enable_if_t<!std::is_convertible_v<Message, std::string_view>, bool>>
+    void Logger::log(const LogLevel level, const Message& msg, Args&&... args) {
+        log(level, std::to_string(msg), args...);
+    }
+
     inline void Logger::flush() const {
         m_sink->flush();
     }

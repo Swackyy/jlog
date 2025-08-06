@@ -26,7 +26,7 @@ namespace JLog {
         void format(const std::string_view& pattern);
 
         /**
-         * Main logging method
+         * Logging method for any string type
          * @tparam Args class types for the format arguments
          * @param level the logging level of this message
          * @param msg the message contents
@@ -34,6 +34,17 @@ namespace JLog {
          */
         template<class... Args>
         void log(LogLevel level, const std::string_view& msg, Args&&... args);
+
+        /**
+         * Logging method for any non-string type
+         * @tparam Message any type which can be converted to a string through @code std::to_string@endcode
+         * @tparam Args class types for the format arguments
+         * @param level the logging level of this message
+         * @param msg the message contents
+         * @param args arguments to replace @code{}@endcode in the @code msg@endcode parameter
+         */
+        template<class Message, class... Args, std::enable_if_t<!std::is_convertible_v<Message, std::string_view>, bool> = false>
+        void log(LogLevel level, const Message& msg, Args&&... args);
 
         /**
          * Flush the character sink
