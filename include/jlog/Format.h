@@ -9,7 +9,9 @@
 namespace JLog {
     class Format;
 
-    // Base interface for formatter types
+    /**
+     * Base interface for formatter types
+     */
     class Formatter {
     public:
         virtual ~Formatter() = default;
