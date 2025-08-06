@@ -1,6 +1,6 @@
 # JellyLog
 
-~ ***JLog*** *(Requires C++ 20)*
+~ ***JLog*** *(Minimum C++ 20)*
 
 A simple logging system originally created for the Nova language toolchain, it is:
 - Easy to use
@@ -34,8 +34,21 @@ int main() {
 }
 ```
 
+## Features
+
+Sinks:
+- Ansi Console Colour (non-Windows default)
+- File Descriptor
+- File
+- Windows Console Colour (Windows default)
+
+Other:
+- 6 Log levels (and off)
+- 8-Bit colour associated with the logging levels
+- Custom pattern formatting
+
 ---
 
 ## Other
 
-*Submit issues or feature requests to the GitHub page*
+*Submit issues or feature requests to the [GitHub page](https://github.com/Swackyy/jlog)*

@@ -1,3 +1,4 @@
+#include "jlog/FileSink.h"
 #include "jlog/JLog.h"
 
 // An internal test used when developing the library
@@ -27,6 +28,12 @@ int main() {
 
     // Ensure the global format did not change
     JLOG_DEBUG("Testing global logger pattern");
+
+    // File sink
+    const std::shared_ptr<JLog::Logger> fileLogger = JLog::getLogger<JLog::FileSink>("fileLogger", "test.txt", false);
+
+    fileLogger->log(JLog::LogLevel_Debug, "Hello, world!");
+    fileLogger->log(JLog::LogLevel_Trace, "Trace file sink message");
 
     // - - -
     // Keep autoclosing consoles open

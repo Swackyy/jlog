@@ -2,6 +2,8 @@
 
 #include <string_view>
 
+#include "LogLevel.h"
+
 namespace JLog {
     class Sink {
     public:
