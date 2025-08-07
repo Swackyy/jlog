@@ -7,6 +7,23 @@
 #include "jlog/Common.h"
 
 namespace JLog {
+    inline StdTimeFormatter::StdTimeFormatter(
+        const char code)
+    : m_code(code) {}
+
+    inline std::string StdTimeFormatter::emit(Format* format, const std::string_view& msg, LogLevel level) {
+        constexpr int bufferSize = 128;
+        char buffer[bufferSize];
+
+        const char formatStr[3] = {'%', m_code, '\0'};
+
+        const auto epochSecs = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        const std::tm* tm = std::localtime(&epochSecs);
+
+        strftime(buffer, bufferSize, formatStr, tm);
+        return buffer;
+    }
+
     inline std::string MessageFormatter::emit(Format* format, const std::string_view& msg, LogLevel level) {
         return std::string(msg);
     }
@@ -20,7 +37,7 @@ namespace JLog {
     }
 
     inline std::string CapitaliseFormatter::emit(Format* format, const std::string_view& msg, LogLevel level) {
-        format->toggleCapitalise();
+        format->m_capitalise = !format->m_capitalise;
 
         return "";
     }
@@ -30,7 +47,7 @@ namespace JLog {
     }
 
     inline std::string UppercaseFormatter::emit(Format* format, const std::string_view& msg, LogLevel level) {
-        format->toggleUppercase();
+        format->m_uppercase = !format->m_uppercase;
 
         return "";
     }
@@ -52,17 +69,49 @@ namespace JLog {
             const char c = pattern.at(i);
 
             if (c == '%') {
-                if (i + 1 < pattern.size()) {
-                    switch (pattern.at(++i)) {
-                        case '%': current += '%';
-                        case 'c': addFormatter<CapitaliseFormatter>(current);  break;
-                        case 'l': addFormatter<LevelFormatter>(current);       break;
-                        case 'u': addFormatter<UppercaseFormatter>(current);   break;
-                        case 'v': addFormatter<MessageFormatter>(current);     break;
-                        default:  JLOG_THROW("'%" + c + "' is not a recognised formatting code");
+                if (++i < pattern.size()) {
+                    const char c0 = pattern.at(i);
+
+                    switch (c0) {
+                        case '%': {
+                            current += '%';
+                            break;
+                        }
+
+                        case 'c': {
+                            addFormatter<CapitaliseFormatter>(current);
+                            break;
+                        }
+
+                        case 'l': {
+                            addFormatter<LevelFormatter>(current);
+                            break;
+                        }
+
+                        case 't': {
+                            if (++i < pattern.size()) {
+                                addFormatter<StdTimeFormatter>(current, pattern.at(i));
+                            } else {
+                                JLOG_THROW("Expected a formatting code following '%t'");
+                            }
+
+                            break;
+                        }
+
+                        case 'u': {
+                            addFormatter<UppercaseFormatter>(current);
+                            break;
+                        }
+
+                        case 'v': {
+                            addFormatter<MessageFormatter>(current);
+                            break;
+                        }
+
+                        default: JLOG_THROW("'%" + c0 + "' is not a recognised formatting code");
                     }
                 } else {
-                    current += '%';
+                    JLOG_THROW("Expected a formatting code following '%'");
                 }
             } else {
                 current += c;
@@ -72,14 +121,6 @@ namespace JLog {
         if (!current.empty()) {
             m_formatters.emplace_back(std::make_unique<ConstStringFormatter>(current));
         }
-    }
-
-    inline void Format::toggleCapitalise() {
-        m_capitalise = !m_capitalise;
-    }
-
-    inline void Format::toggleUppercase() {
-        m_uppercase = !m_uppercase;
     }
 
     inline std::string Format::emit(const std::string_view& msg, const LogLevel level) {

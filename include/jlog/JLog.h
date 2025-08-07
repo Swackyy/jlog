@@ -46,6 +46,6 @@
 // todo: Coloured text in a range, so for instance where the pattern is '[%l]: %v', only colour the logging level ('%l') with its associated colour, instead of the entire message
 // todo: Allow for multiple sinks, giving out a public reference to their storage
 // todo: Scan over for any potential performance improvements
-// todo: Cleanup the registry code?
 // todo: Add mutex support for multithreaded logging
-// todo: Add timestamping, including a formatter type
+// todo: Consider changing the sinks being stored as std::shared_ptr to std::unique_ptr
+// todo: Allow for "dropping" of loggers

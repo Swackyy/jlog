@@ -1,6 +1,12 @@
 #include "jlog/FileSink.h"
 #include "jlog/JLog.h"
 
+#ifdef WIN32
+#define JLOG_SLEEP(x) Sleep(x)
+#else
+#define JLOG_SLEEP(x) usleep(x);
+#endif
+
 // An internal test used when developing the library
 // Not added to the '.gitignore' because it may be useful reference material
 int main() {
@@ -35,14 +41,18 @@ int main() {
     // File sink
     const std::shared_ptr<JLog::Logger> fileLogger = JLog::getLogger<JLog::FileSink>("fileLogger", "test.txt", false);
 
+    // Test time formatters (%t + code -> strftime)
+    fileLogger->format("[%tH:%tM:%tS] [%l]: %v");
+
     fileLogger->log(JLog::LogLevel_Debug, "Hello, world!");
     fileLogger->log(JLog::LogLevel_Trace, "Trace file sink message");
 
+    for (int i = 1; i <= 100; i++) {
+        fileLogger->log(JLog::LogLevel_Debug, "Iteration {}", i);
+        JLOG_SLEEP(20);
+    }
+
     // - - -
     // Keep autoclosing consoles open
-#ifdef WIN32
-    Sleep(999999999);
-#else
-    usleep(999999999);
-#endif
+    JLOG_SLEEP(999999999);
 }

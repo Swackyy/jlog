@@ -7,7 +7,21 @@
 #include "LogLevel.h"
 
 namespace JLog {
-    class Format;
+    class Formatter;
+
+    class Format {
+        std::vector<std::unique_ptr<Formatter>> m_formatters;
+
+        template<class Formatter, class... Args>
+        void addFormatter(std::string& current, Args&&... args);
+    public:
+        bool m_capitalise = false;
+        bool m_uppercase = false;
+
+        explicit Format(const std::string_view& pattern);
+
+        std::string emit(const std::string_view& msg, LogLevel level);
+    };
 
     /**
      * Base interface for formatter types
@@ -17,6 +31,14 @@ namespace JLog {
         virtual ~Formatter() = default;
 
         virtual std::string emit(Format* format, const std::string_view& msg, LogLevel level) = 0;
+    };
+
+    class StdTimeFormatter final : public Formatter {
+        const char m_code;
+    public:
+        explicit StdTimeFormatter(char code);
+
+        std::string emit(Format* format, const std::string_view& msg, LogLevel level) override;
     };
 
     class MessageFormatter final : public Formatter {
@@ -45,23 +67,6 @@ namespace JLog {
     class UppercaseFormatter final : public Formatter {
     public:
         std::string emit(Format* format, const std::string_view& msg, LogLevel level) override;
-    };
-
-    class Format {
-        std::vector<std::unique_ptr<Formatter>> m_formatters;
-        bool m_capitalise = false;
-        bool m_uppercase = false;
-
-        template<class Formatter, class... Args>
-        void addFormatter(std::string& current, Args&&... args);
-    public:
-        explicit Format(const std::string_view& pattern);
-
-        void toggleCapitalise();
-
-        void toggleUppercase();
-
-        std::string emit(const std::string_view& msg, LogLevel level);
     };
 
     void format(const std::string_view& pattern);
