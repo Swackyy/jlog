@@ -7,16 +7,20 @@
 #include "Sink.h"
 
 namespace JLog {
+    /**
+     * A logger
+     *
+     * Do not instantiate these directly, use the Registry methods provided
+     */
     class Logger {
         std::shared_ptr<Format> m_format = getGlobalFormat();
-    protected:
-        std::shared_ptr<Sink> m_sink;
+
+        std::vector<std::shared_ptr<Sink>> m_sinks;
     public:
         /**
-         * Create a logger with a character sink
-         * @param sink a shared pointer to a character sink
+         * Instantiate an empty logger, holding no character sinks
          */
-        explicit Logger(const std::shared_ptr<Sink>& sink);
+        Logger();
 
         /**
          * Set a custom formatting pattern from this logger,
@@ -47,15 +51,14 @@ namespace JLog {
         void log(LogLevel level, const Message& msg, Args&&... args);
 
         /**
-         * Flush the character sink
+         * Flush all character sinks
          */
         void flush() const;
 
         /**
-         * Set the character sink to a new one
-         * @param sink a shared pointer to a character sink
+         * Returns a mutable reference to the character sinks held by this logger
          */
-        void setSink(const std::shared_ptr<Sink>& sink);
+        std::vector<std::shared_ptr<Sink>>& getSinks();
 
         /**
          * Sets the foreground and background colours for the output text

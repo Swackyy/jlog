@@ -11,7 +11,7 @@ namespace JLog {
     class AnsiConsoleColourSink final : public ConsoleColourSink {
         FDSink m_backingSink;
 
-        static constexpr char FG_CODES[][6] = {
+        static constexpr char FG_CODES[][16] = {
             "\033[30m",
             "\033[31m",
             "\033[32m",
@@ -30,15 +30,15 @@ namespace JLog {
             "\033[97m"
         };
 
-        static constexpr char BG_CODES[][7] = {
-            "\033[40m\0",
-            "\033[41m\0",
-            "\033[42m\0",
-            "\033[43m\0",
-            "\033[44m\0",
-            "\033[45m\0",
-            "\033[46m\0",
-            "\033[47m\0",
+        static constexpr char BG_CODES[][16] = {
+            "\033[40m",
+            "\033[41m",
+            "\033[42m",
+            "\033[43m",
+            "\033[44m",
+            "\033[45m",
+            "\033[46m",
+            "\033[47m",
             "\033[100m",
             "\033[101m",
             "\033[102m",

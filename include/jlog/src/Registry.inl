@@ -23,7 +23,50 @@ namespace JLog {
             return m_loggers.at(key);
         }
 
-        return m_loggers.try_emplace<Logger*>(key, new Logger(std::make_shared<SinkT>(args...))).first->second;
+        // Would love to use a Logger constructor specialised for one character sink,
+        // however it would not be possible to specify template parameter SinkT because of C++ limitations
+        const std::shared_ptr<Logger> logger = m_loggers.try_emplace<Logger*>(key, new Logger()).first->second;
+
+        logger->getSinks().push_back(std::make_shared<SinkT>(args...));
+
+        return logger;
+    }
+
+    inline std::shared_ptr<Logger> Registry::get(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks) {
+        if (m_loggers.contains(key)) {
+            return m_loggers.at(key);
+        }
+
+        const std::shared_ptr<Logger> logger = m_loggers.try_emplace<Logger*>(key, new Logger()).first->second;
+
+        std::vector<std::shared_ptr<Sink>>& loggerSinks = logger->getSinks();
+        loggerSinks.reserve(sinks.size());
+
+        for (const std::shared_ptr<Sink>& sink : sinks) {
+            loggerSinks.push_back(sink);
+        }
+
+        return logger;
+    }
+
+    inline std::shared_ptr<Sink> getStdOutSink() {
+#ifdef WIN32
+        static auto sink = std::make_shared<WinConsoleColourSink>(STD_OUTPUT_HANDLE, true);
+#else
+        static auto sink = std::make_shared<AnsiConsoleColourSink>(stdout, true);
+#endif
+
+        return sink;
+    }
+
+    inline std::shared_ptr<Sink> getStdErrSink() {
+#ifdef WIN32
+        static auto sink = std::make_shared<WinConsoleColourSink>(STD_ERROR_HANDLE, true);
+#else
+        static auto sink = std::make_shared<AnsiConsoleColourSink>(stderr, true);
+#endif
+
+        return sink;
     }
 
     inline Registry& getRegistry() {
@@ -37,12 +80,14 @@ namespace JLog {
         return getRegistry().get<SinkT>(key, args...);
     }
 
+    inline std::shared_ptr<Logger> getLogger(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks) {
+        return getRegistry().get(key, sinks);
+    }
+
     inline std::shared_ptr<Logger> getDefaultNew(const std::string_view& key) {
-#ifdef WIN32
-        return getRegistry().get<WinConsoleColourSink>(key, STD_OUTPUT_HANDLE, true);
-#else
-        return getRegistry().get<AnsiConsoleColourSink>(key, stdout, true);
-#endif
+        // Do not use this vector instantiation yourself without good reason,
+        // it is only used here because the standard console sinks have already been created
+        return getRegistry().get(key, std::vector(1, getStdOutSink()));
     }
 
     template<class SinkT, class... Args>

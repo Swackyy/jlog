@@ -30,10 +30,13 @@ int main() {
     // Local message formatting
     customLogger->format("Custom logger> %v");
 
+    // Ensure changing local formats does not mess with the global one
+    JLOG_DEBUG("Should be prepended by '>[%l]: '");
+
     // Ensure changing the global format does not mess with local ones
     JLog::format(">[%l]: %v"); // No changes
 
-    customLogger->log(JLog::LogLevel_Info, "Hello from our custom logger!");
+    customLogger->log(JLog::LogLevel_Debug, "Should be prepended by 'Custom logger> '");
 
     // Ensure the global format did not change
     JLOG_DEBUG("Testing global logger pattern");
@@ -47,6 +50,15 @@ int main() {
     fileLogger->log(JLog::LogLevel_Debug, "Hello, world!");
     fileLogger->log(JLog::LogLevel_Trace, "Trace file sink message");
 
+    // todo: This is clunky, make a utility / factory method for this
+    std::vector<std::shared_ptr<JLog::Sink>> sinkVec;
+    sinkVec.reserve(2);
+    sinkVec.push_back(JLog::getStdOutSink());
+    sinkVec.push_back(std::make_shared<JLog::FileSink>("multiLogger.txt", false));
+    const std::shared_ptr<JLog::Logger> multiSinkLogger = JLog::getLogger("multiSinkLogger", std::vector(sinkVec));
+    multiSinkLogger->log(JLog::LogLevel_Debug, "This should be logged in both the console and 'multiLogger.txt'");
+
+    // todo: move to separate thread
     for (int i = 1; i <= 100; i++) {
         fileLogger->log(JLog::LogLevel_Debug, "Iteration {}", i);
         JLOG_SLEEP(20);

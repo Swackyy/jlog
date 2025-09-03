@@ -10,9 +10,17 @@ namespace JLog {
     public:
         [[nodiscard]] std::shared_ptr<Logger> attemptGet(const std::string_view& key);
 
+        // For 1 sink
         template<class SinkT, class... Args>
         std::shared_ptr<Logger> get(const std::string_view& key, Args&&... args);
+
+        // For multiple sinks
+        std::shared_ptr<Logger> get(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks);
     };
+
+    std::shared_ptr<Sink> getStdOutSink();
+
+    std::shared_ptr<Sink> getStdErrSink();
 
     /**
      * Get the logger registry
@@ -21,7 +29,7 @@ namespace JLog {
     Registry& getRegistry();
 
     /**
-     * Get or create a logger
+     * Get or create a logger holding one character sink
      * @tparam SinkT type of character sink
      * @tparam Args class types for character sink construction
      * @param key the identifier for this logger
@@ -30,6 +38,8 @@ namespace JLog {
      */
     template<class SinkT, class... Args>
     std::shared_ptr<Logger> getLogger(const std::string_view& key, Args&&... args);
+
+    std::shared_ptr<Logger> getLogger(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks);
 
     /**
      * Get or create a default console logger

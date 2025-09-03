@@ -3,6 +3,7 @@
 #include "jlog/Format.h"
 
 #include <algorithm>
+#include <chrono>
 
 #include "jlog/Common.h"
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ConsoleColour.h"
+
 // !! TweakMe !!
 
 // If defined, will forcibly exit the program with the specified exit code (default 1) on a fatal logging
