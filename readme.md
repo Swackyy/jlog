@@ -7,14 +7,14 @@ A simple logging system originally created for the Nova language toolchain, it i
 - Cross-platform (Windows and Ansi consoles)
 - Very small
 
-This makes it perfect to use in performance critical applications, or specialised cases where other types of logging would never be needed
+This makes it perfect to use both in performance critical applications and ones where detail is required
 
 > [!NOTE]
 > This logging system is limited, and more features may be added later down the line
 
 ## How to use
 
-Simply copy over the entire `include` directory to your workspace, and add it to your include search paths
+Simply copy over the entire `include/jlog` directory to your workspace, and add it to your include search paths
 
 CMake example:
 ```cmake
@@ -24,7 +24,7 @@ CMake example:
 include_directories(libs/include)
 ```
 
-And include the main file (or others) in your source or header files:
+And include the main header file to get started:
 
 ```c++
 #include "jlog/JLog.h"
