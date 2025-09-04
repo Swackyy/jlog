@@ -5,10 +5,14 @@
 #include "jlog/Settings.h"
 
 namespace JLog {
+    inline LogLevel _level = JLOG_LEVEL;
+
     inline LogLevel getLevel() {
-        static LogLevel _level = JLOG_LEVEL;
-        
         return _level;
+    }
+
+    inline void setLevel(const LogLevel level) {
+        _level = level;
     }
 
     constexpr std::string_view levelNames[] = {
