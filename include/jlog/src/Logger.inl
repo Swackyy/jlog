@@ -2,7 +2,7 @@
 
 #include "jlog/Logger.h"
 
-#include <format>
+#include JLOG_FMTLIB
 
 #include "jlog/ConsoleColourSink.h"
 
@@ -17,7 +17,7 @@ namespace JLog {
     void Logger::log(const LogLevel level, const std::string_view& msg, Args&&... args) {
         if (level >= getLevel()) {
             for (const std::shared_ptr<Sink>& sink : m_sinks) {
-                sink->log(std::vformat(m_format->emit(msg, level) + '\n', std::make_format_args(args...)), level);
+                sink->log(fmt::vformat(m_format->emit(msg, level) + '\n', fmt::make_format_args(args...)), level);
             }
         }
 #ifdef JLOG_EXIT_ON_FATAL

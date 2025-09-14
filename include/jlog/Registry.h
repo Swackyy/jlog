@@ -15,10 +15,10 @@ namespace JLog {
          */
         [[nodiscard]] std::shared_ptr<Logger> attemptGet(const std::string_view& key);
 
-        // For 0 sinks
+        // 0 sinks
         std::shared_ptr<Logger> get(const std::string_view& key);
 
-        // For 1 sink
+        // 1 sink
         template<class SinkT, class... Args>
         std::shared_ptr<Logger> get(const std::string_view& key, Args&&... args);
     };

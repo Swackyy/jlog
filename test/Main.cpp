@@ -59,6 +59,12 @@ int main() {
     sinks.push_back(std::make_shared<JLog::FileSink>("multiLogger.txt", false));
     multiSinkLogger->log(JLog::LogLevel_Debug, "This should be logged in both the console and 'multiLogger.txt'");
 
+    std::vector<std::string> vec;
+    vec.reserve(2);
+    vec.emplace_back("hello");
+    vec.emplace_back("world");
+    JLOG_DEBUG("Here: {}", vec);
+
     // todo: move to separate thread
     for (int i = 1; i <= 100; i++) {
         fileLogger->log(JLog::LogLevel_Debug, "Iteration {}", i);

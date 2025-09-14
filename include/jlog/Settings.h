@@ -31,3 +31,12 @@
     JLog::COL_LIGHT_RED,    \
     JLog::COL_RED,          \
     JLog::COL_BLACK
+
+// #define this if you wish to use your own fmtlib implementation
+#ifndef JLOG_FMTLIB
+#define JLOG_FMTLIB "bundled/fmt/ranges.h"
+#endif
+
+#ifndef FMT_HEADER_ONLY
+#define FMT_HEADER_ONLY
+#endif

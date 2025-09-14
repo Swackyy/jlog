@@ -17,17 +17,18 @@ namespace JLog {
         return nullptr;
     }
 
-    template<class SinkT, class... Args>
+    inline std::shared_ptr<Logger> Registry::get(const std::string_view& key) {
+        return m_loggers.try_emplace<Logger*>(key, new Logger()).first->second;
+    }
+
+    template<class SinkT, class ... Args>
     std::shared_ptr<Logger> Registry::get(const std::string_view& key, Args&&... args) {
-        if (m_loggers.contains(key)) {
-            return m_loggers.at(key);
+        const auto&[iterator, flag] = m_loggers.try_emplace(key, new Logger());
+        const std::shared_ptr<Logger> logger = iterator->second;
+
+        if (flag) {
+            logger->getSinks().push_back(std::make_shared<SinkT>(std::forward<Args>(args)...));
         }
-
-        // Would love to use a Logger constructor specialised for one character sink,
-        // however it would not be possible to specify template parameter SinkT because of C++ limitations
-        const std::shared_ptr<Logger> logger = m_loggers.try_emplace<Logger*>(key, new Logger()).first->second;
-
-        logger->getSinks().push_back(std::make_shared<SinkT>(args...));
 
         return logger;
     }
@@ -58,20 +59,29 @@ namespace JLog {
         return _registry;
     }
 
+    inline std::shared_ptr<Logger> getLogger(const std::string_view& key) {
+        return getRegistry().get(key);
+    }
+
     template<class SinkT, class... Args>
     std::shared_ptr<Logger> getLogger(const std::string_view& key, Args&&... args) {
-        return getRegistry().get<SinkT>(key, args...);
+        return getRegistry().get<SinkT>(key, std::forward<Args>(args)...);
     }
 
     inline std::shared_ptr<Logger> getDefaultNew(const std::string_view& key) {
         const std::shared_ptr<Logger> logger = getRegistry().get(key);
-        logger->getSinks().emplace_back(getStdOutSink());
+        std::vector<std::shared_ptr<Sink>>& sinks = logger->getSinks();
+
+        if (sinks.empty()) {
+            sinks.push_back(getStdOutSink());
+        }
+
         return logger;
     }
 
     template<class SinkT, class... Args>
     std::shared_ptr<Logger> getDefault(Args&&... args) {
-        return getRegistry().get<SinkT>("jlog", args...);
+        return getLogger<SinkT>("jlog", std::forward<Args>(args)...);
     }
 
     inline std::shared_ptr<Logger> getDefault() {
