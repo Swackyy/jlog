@@ -2989,6 +2989,6 @@ FMT_END_EXPORT
 FMT_END_NAMESPACE
 
 #ifdef FMT_HEADER_ONLY
-#  include "format.h"
+#include "format.h"
 #endif
 #endif  // FMT_BASE_H_

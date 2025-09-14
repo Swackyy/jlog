@@ -4372,7 +4372,7 @@ FMT_END_NAMESPACE
 
 #ifdef FMT_HEADER_ONLY
 #  define FMT_FUNC inline
-#  include "format-inl.h"
+#include "format-inl.h"
 #endif
 
 // Restore _LIBCPP_REMOVE_TRANSITIVE_INCLUDES.

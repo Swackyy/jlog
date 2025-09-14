@@ -2,7 +2,7 @@
 
 #include "jlog/Logger.h"
 
-#include JLOG_FMTLIB
+#include "../bundled/fmt/ranges.h"
 
 #include "jlog/ConsoleColourSink.h"
 
