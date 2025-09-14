@@ -51,11 +51,12 @@ int main() {
     fileLogger->log(JLog::LogLevel_Trace, "Trace file sink message");
 
     // todo: This is clunky, make a utility / factory method for this
-    std::vector<std::shared_ptr<JLog::Sink>> sinkVec;
-    sinkVec.reserve(2);
-    sinkVec.push_back(JLog::getStdOutSink());
-    sinkVec.push_back(std::make_shared<JLog::FileSink>("multiLogger.txt", false));
-    const std::shared_ptr<JLog::Logger> multiSinkLogger = JLog::getLogger("multiSinkLogger", std::vector(sinkVec));
+    // todo: updated it once so it is a bit cleaner in the backend, but still complete the above
+    const std::shared_ptr<JLog::Logger> multiSinkLogger = JLog::getLogger("multiSinkLogger");
+    std::vector<std::shared_ptr<JLog::Sink>>& sinks = multiSinkLogger->getSinks();
+    sinks.reserve(2);
+    sinks.push_back(JLog::getStdOutSink());
+    sinks.push_back(std::make_shared<JLog::FileSink>("multiLogger.txt", false));
     multiSinkLogger->log(JLog::LogLevel_Debug, "This should be logged in both the console and 'multiLogger.txt'");
 
     // todo: move to separate thread

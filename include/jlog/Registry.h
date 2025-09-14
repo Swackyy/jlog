@@ -8,18 +8,35 @@ namespace JLog {
     class Registry {
         std::map<std::string_view, std::shared_ptr<Logger>> m_loggers;
     public:
+        /**
+         * Attempt to get a logger
+         * @param key the identifier for this logger
+         * @return the logger with provided @code key@endcode if it exists, else @code nullptr@endcode
+         */
         [[nodiscard]] std::shared_ptr<Logger> attemptGet(const std::string_view& key);
+
+        // For 0 sinks
+        std::shared_ptr<Logger> get(const std::string_view& key);
 
         // For 1 sink
         template<class SinkT, class... Args>
         std::shared_ptr<Logger> get(const std::string_view& key, Args&&... args);
-
-        // For multiple sinks
-        std::shared_ptr<Logger> get(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks);
     };
 
+    /**
+     * Get the default standard out sink corresponding to the target platform
+     * @return sink of type:
+     * - Windows: @code WinConsoleColourSink@endcode
+     * - Other:   @code AnsiConsoleColourSink@endcode
+     */
     std::shared_ptr<Sink> getStdOutSink();
 
+    /**
+     * Get the default standard error sink corresponding to the target platform
+     * @return sink of type:
+     * - Windows: @code WinConsoleColourSink@endcode
+     * - Other:   @code AnsiConsoleColourSink@endcode
+     */
     std::shared_ptr<Sink> getStdErrSink();
 
     /**
@@ -27,6 +44,13 @@ namespace JLog {
      * @return the global logger registry
      */
     Registry& getRegistry();
+
+    /**
+     * Get or create a logger, holding no character sinks
+     * @param key the identifier for this logger
+     * @return the logger with provided @code key@endcode if it exists, else a new logger
+     */
+    std::shared_ptr<Logger> getLogger(const std::string_view& key);
 
     /**
      * Get or create a logger holding one character sink
@@ -38,8 +62,6 @@ namespace JLog {
      */
     template<class SinkT, class... Args>
     std::shared_ptr<Logger> getLogger(const std::string_view& key, Args&&... args);
-
-    std::shared_ptr<Logger> getLogger(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks);
 
     /**
      * Get or create a default console logger

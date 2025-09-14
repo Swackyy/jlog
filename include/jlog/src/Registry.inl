@@ -32,23 +32,6 @@ namespace JLog {
         return logger;
     }
 
-    inline std::shared_ptr<Logger> Registry::get(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks) {
-        if (m_loggers.contains(key)) {
-            return m_loggers.at(key);
-        }
-
-        const std::shared_ptr<Logger> logger = m_loggers.try_emplace<Logger*>(key, new Logger()).first->second;
-
-        std::vector<std::shared_ptr<Sink>>& loggerSinks = logger->getSinks();
-        loggerSinks.reserve(sinks.size());
-
-        for (const std::shared_ptr<Sink>& sink : sinks) {
-            loggerSinks.push_back(sink);
-        }
-
-        return logger;
-    }
-
     inline std::shared_ptr<Sink> getStdOutSink() {
 #ifdef WIN32
         static auto sink = std::make_shared<WinConsoleColourSink>(STD_OUTPUT_HANDLE, true);
@@ -80,14 +63,10 @@ namespace JLog {
         return getRegistry().get<SinkT>(key, args...);
     }
 
-    inline std::shared_ptr<Logger> getLogger(const std::string_view& key, const std::vector<std::shared_ptr<Sink>>& sinks) {
-        return getRegistry().get(key, sinks);
-    }
-
     inline std::shared_ptr<Logger> getDefaultNew(const std::string_view& key) {
-        // Do not use this vector instantiation yourself without good reason,
-        // it is only used here because the standard console sinks have already been created
-        return getRegistry().get(key, std::vector(1, getStdOutSink()));
+        const std::shared_ptr<Logger> logger = getRegistry().get(key);
+        logger->getSinks().emplace_back(getStdOutSink());
+        return logger;
     }
 
     template<class SinkT, class... Args>
