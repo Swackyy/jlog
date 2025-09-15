@@ -34,7 +34,7 @@
 
 // #define this if you wish to use your own fmtlib implementation
 #ifndef JLOG_FMTLIB_RANGES
-#define JLOG_FMTLIB_RANGES "bundled/fmt/ranges.h"
+#define JLOG_FMTLIB_RANGES "jlog/bundled/fmt/ranges.h"
 #endif
 
 #ifndef FMT_HEADER_ONLY
