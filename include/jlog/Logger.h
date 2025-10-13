@@ -14,7 +14,6 @@ namespace JLog {
      */
     class Logger {
         std::shared_ptr<Format> m_format = getGlobalFormat();
-
         std::vector<std::shared_ptr<Sink>> m_sinks;
     public:
         /**

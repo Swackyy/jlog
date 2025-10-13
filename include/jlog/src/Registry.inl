@@ -85,6 +85,8 @@ namespace JLog {
     }
 
     inline std::shared_ptr<Logger> getDefault() {
-        return getDefaultNew("jlog");
+        static std::shared_ptr<Logger> logger = getDefaultNew("jlog");
+
+        return logger;
     }
 }

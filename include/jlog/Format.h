@@ -10,7 +10,7 @@ namespace JLog {
     class Formatter;
 
     class Format {
-        std::vector<std::unique_ptr<Formatter>> m_formatters;
+        std::vector<std::shared_ptr<Formatter>> m_formatters;
 
         template<class Formatter, class... Args>
         void addFormatter(std::string& current, Args&&... args);
@@ -19,6 +19,8 @@ namespace JLog {
         bool m_uppercase = false;
 
         explicit Format(const std::string_view& pattern);
+
+        void copyFrom(const Format& other);
 
         std::string emit(const std::string_view& msg, LogLevel level);
     };

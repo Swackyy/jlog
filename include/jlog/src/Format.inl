@@ -56,11 +56,11 @@ namespace JLog {
     template<class Formatter, class... Args>
     void Format::addFormatter(std::string& current, Args&&... args) {
         if (!current.empty()) {
-            m_formatters.emplace_back(std::make_unique<ConstStringFormatter>(current));
+            m_formatters.emplace_back(std::make_shared<ConstStringFormatter>(current));
             current.clear();
         }
 
-        m_formatters.emplace_back(std::make_unique<Formatter>(std::forward<Args>(args)...));
+        m_formatters.emplace_back(std::make_shared<Formatter>(std::forward<Args>(args)...));
     }
 
     inline Format::Format(const std::string_view& pattern) {
@@ -120,8 +120,12 @@ namespace JLog {
         }
 
         if (!current.empty()) {
-            m_formatters.emplace_back(std::make_unique<ConstStringFormatter>(current));
+            m_formatters.emplace_back(std::make_shared<ConstStringFormatter>(current));
         }
+    }
+
+    inline void Format::copyFrom(const Format& other) {
+        m_formatters = other.m_formatters;
     }
 
     inline std::string Format::emit(const std::string_view& msg, const LogLevel level) {
@@ -130,14 +134,14 @@ namespace JLog {
         m_capitalise = false;
         m_uppercase = false;
 
-        for (const std::unique_ptr<Formatter>& formatter : m_formatters) {
+        for (const std::shared_ptr<Formatter>& formatter : m_formatters) {
             std::string string = formatter->emit(this, msg, level);
 
             if (m_uppercase) {
                 std::ranges::transform(string, string.begin(), [](const char c){ return std::toupper(c); });
             } else if (m_capitalise) {
-                if (string.length() >= 1) {
-                    string.at(0) = std::toupper(string.at(0));
+                if (!string.empty()) {
+                    string.at(0) = std::toupper(string.at(0)); // NOLINT(*-narrowing-conversions)
                 }
             }
 
@@ -150,7 +154,7 @@ namespace JLog {
     inline auto _format = std::make_shared<Format>("[%l] %v");
 
     inline void format(const std::string_view& pattern) {
-        _format = std::make_shared<Format>(pattern);
+        _format->copyFrom(Format(pattern));
     }
 
     inline const std::shared_ptr<Format>& getGlobalFormat() {
