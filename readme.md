@@ -21,13 +21,13 @@ CMake example:
 # ...
 
 # As an example, where it has been installed to a 'libs' directory
-include_directories(libs/include)
+include_directories(libs)
 ```
 
 And include the main header file to get started:
 
 ```c++
-#include "jlog/JLog.h"
+#include "jlog/jlog.h"
 
 int main() {
     JLOG_INFO("Hello, world!"); // Will print "Hello, world!" in yellow (as default)
