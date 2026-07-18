@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "LogLevel.h"
+#include "log-level.h"
 
 namespace JLog {
     class Formatter;

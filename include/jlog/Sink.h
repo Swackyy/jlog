@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "LogLevel.h"
+#include "log-level.h"
 
 namespace JLog {
     /**

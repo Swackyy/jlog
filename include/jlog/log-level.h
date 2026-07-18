@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ConsoleColour.h"
+#include "console-colour.h"
 
 namespace JLog {
     enum LogLevel {
@@ -40,4 +40,4 @@ namespace JLog {
     constexpr Colour4Bit getLevelColour(LogLevel level);
 }
 
-#include "src/LogLevel.inl"
+#include "src/log-level.inl"

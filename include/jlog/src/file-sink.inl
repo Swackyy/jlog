@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jlog/FileSink.h"
+#include "jlog/file-sink.h"
 
 namespace JLog {
     inline FileSink::FileSink(const std::filesystem::path& path, const bool append) {

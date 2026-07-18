@@ -1,8 +1,8 @@
 #pragma once
 
-#include "jlog/LogLevel.h"
+#include "jlog/log-level.h"
 
-#include "jlog/Settings.h"
+#include "jlog/settings.h"
 
 namespace JLog {
     inline LogLevel _level = JLOG_LEVEL;

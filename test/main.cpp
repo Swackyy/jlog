@@ -1,5 +1,5 @@
-#include "jlog/FileSink.h"
-#include "jlog/JLog.h"
+#include "jlog/file-sink.h"
+#include "jlog/jlog.h"
 
 #ifdef WIN32
 #define JLOG_SLEEP(x) Sleep(x)

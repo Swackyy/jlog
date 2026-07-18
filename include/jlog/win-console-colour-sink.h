@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "LogLevel.h"
+#include "log-level.h"
 
 namespace JLog {
     /**
@@ -17,21 +17,21 @@ namespace JLog {
 
         static constexpr uint8_t COLOURS[] = {
             0,
+            FOREGROUND_RED        | FOREGROUND_GREEN  | FOREGROUND_BLUE,
             FOREGROUND_RED,
             FOREGROUND_GREEN,
-            FOREGROUND_RED        | FOREGROUND_GREEN,
             FOREGROUND_BLUE,
+            FOREGROUND_RED        | FOREGROUND_GREEN,
             FOREGROUND_RED        | FOREGROUND_BLUE,
             FOREGROUND_GREEN      | FOREGROUND_BLUE,
-            FOREGROUND_RED        | FOREGROUND_GREEN      | FOREGROUND_BLUE,
             FOREGROUND_INTENSITY,
-            FOREGROUND_RED        | FOREGROUND_INTENSITY,
-            FOREGROUND_GREEN      | FOREGROUND_INTENSITY,
-            FOREGROUND_RED        | FOREGROUND_GREEN      | FOREGROUND_INTENSITY,
-            FOREGROUND_BLUE       | FOREGROUND_INTENSITY,
-            FOREGROUND_RED        | FOREGROUND_BLUE       | FOREGROUND_INTENSITY,
-            FOREGROUND_GREEN      | FOREGROUND_BLUE       | FOREGROUND_INTENSITY,
-            FOREGROUND_RED        | FOREGROUND_GREEN      | FOREGROUND_BLUE       | FOREGROUND_INTENSITY
+            FOREGROUND_RED        | FOREGROUND_GREEN  | FOREGROUND_BLUE   | FOREGROUND_INTENSITY,
+            FOREGROUND_RED                                                | FOREGROUND_INTENSITY,
+            FOREGROUND_GREEN                                              | FOREGROUND_INTENSITY,
+            FOREGROUND_BLUE                                               | FOREGROUND_INTENSITY,
+            FOREGROUND_RED        | FOREGROUND_GREEN                      | FOREGROUND_INTENSITY,
+            FOREGROUND_RED        | FOREGROUND_BLUE                       | FOREGROUND_INTENSITY,
+            FOREGROUND_GREEN      | FOREGROUND_BLUE                       | FOREGROUND_INTENSITY
         };
     public:
         WinConsoleColourSink(uint32_t handle, bool logLevelColours);
@@ -56,4 +56,4 @@ namespace JLog {
     };
 }
 
-#include "src/WinConsoleColourSink.inl"
+#include "src/win-console-colour-sink.inl"

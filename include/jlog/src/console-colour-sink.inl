@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jlog/ConsoleColourSink.h"
+#include "jlog/console-colour-sink.h"
 
 namespace JLog {
     inline ConsoleColourSink::ConsoleColourSink(

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <fstream>
 
-#include "Sink.h"
+#include "sink.h"
 
 namespace JLog {
     class FileSink final : public Sink {
@@ -19,4 +19,4 @@ namespace JLog {
     };
 }
 
-#include "src/FileSink.inl"
+#include "src/file-sink.inl"

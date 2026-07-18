@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ConsoleColour.h"
+#include "console-colour.h"
 
 // !! TweakMe !!
 

@@ -3,7 +3,7 @@
 #include "jlog/Registry.h"
 
 #ifdef WIN32
-#include "jlog/WinConsoleColourSink.h"
+#include "jlog/win-console-colour-sink.h"
 #else
 #include "jlog/AnsiConsoleColourSink.h"
 #endif

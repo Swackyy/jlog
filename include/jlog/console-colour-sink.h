@@ -20,4 +20,4 @@ namespace JLog {
     };
 }
 
-#include "src/ConsoleColourSink.inl"
+#include "src/console-colour-sink.inl"

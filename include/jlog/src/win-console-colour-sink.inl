@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jlog/WinConsoleColourSink.h"
+#include "jlog/win-console-colour-sink.h"
 
 namespace JLog {
     inline WinConsoleColourSink::WinConsoleColourSink(

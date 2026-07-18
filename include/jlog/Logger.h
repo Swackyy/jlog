@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "Format.h"
-#include "LogLevel.h"
-#include "Sink.h"
+#include "format.h"
+#include "log-level.h"
+#include "sink.h"
 
 namespace JLog {
     /**

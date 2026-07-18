@@ -4,7 +4,7 @@
 
 #include JLOG_FMTLIB_RANGES
 
-#include "jlog/ConsoleColourSink.h"
+#include "jlog/console-colour-sink.h"
 
 namespace JLog {
     inline Logger::Logger() {}

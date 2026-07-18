@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Registry.h"
+#include "registry.h"
 
 #if 0 >= JLOG_LEVEL
 #define JLOG_TRACE(...) JLog::getDefault()->log(JLog::LogLevel_Trace, __VA_ARGS__)
